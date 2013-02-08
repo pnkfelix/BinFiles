@@ -1,1 +1,1 @@
-CC=clang CXX=clang++ ../js/src/configure --enable-debug --disable-optimize --enable-threadsafe --with-system-nspr
+CC=clang CXX=clang++ ../js/src/configure --enable-debug --disable-optimize --enable-threadsafe --with-system-nspr --enable-macos-target=10.7
