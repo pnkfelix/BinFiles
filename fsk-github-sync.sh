@@ -26,4 +26,11 @@ if test "$bec" = 1 -o "$dec" = 1 -o "$cec" = 1; then
     exit
 fi
 
-# if test "$bec" = 
+function push {
+    dir=$1
+    (cd ~/$dir && git push git@github.com:pnkfelix/$dir.git )
+}
+
+push "BinFiles"
+push "DotFiles"
+push "ConfigFiles"
