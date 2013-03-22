@@ -1,0 +1,37 @@
+#!/bin/sh
+set -e
+
+ME=$(basename $0)
+
+function usage() {
+    echo "Usage: $ME <grammar-name> [<start-symbol>]"
+}
+
+if [ $# -lt 1 ]; then
+   usage;
+   exit 1;
+fi
+
+GRAMMAR=$(echo $1 | sed -e s/.g4$// )
+
+
+if [ $# -lt 2 ]; then
+#  echo "Unfortunately inference of <start-symbol> is not yet implemented."
+#  exit 2;
+  RULE=$(grep ':' $GRAMMAR.g4 | head -1 | sed -e 's/^[ ]*\([^ ]*\)[ ]*:.*/\1/')
+  echo "Inferred start-symbol: $RULE for $GRAMMAR"
+else
+  RULE=$2
+fi
+
+antlr4 $GRAMMAR.g4
+antlr-javac $GRAMMAR*.java
+
+TMPFILE=/tmp/$GRAMMAR.sexp
+
+antlr-grun "$GRAMMAR" "$RULE" -tree > $TMPFILE
+
+larceny -nobanner -- \
+ -e "(error-handler (let ((xit exit)) (lambda (x) (let ((out (current-error-port))) (if (condition? x) (display-condition x out)) (newline out) (xit 1)))))" \
+ -e "(call-with-input-file \"$TMPFILE\" (lambda (p) (pretty-print (read p))))" \
+ -e "(exit)"

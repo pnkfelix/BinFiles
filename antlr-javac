@@ -1,0 +1,6 @@
+#!/bin/sh
+
+ME=$(basename $0)
+DIR=~/opt/antlr4
+CLASSPATH=".:$DIR/antlr-4.0-complete.jar:$CLASSPATH"
+exec javac -cp $CLASSPATH "$@"

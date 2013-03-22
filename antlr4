@@ -1,0 +1,7 @@
+#!/bin/sh
+
+ME=$(basename $0)
+DIR=~/opt/antlr4
+JAR=antlr-4.0.1-dev-complete.jar
+CLASSPATH=".:$DIR/$JAR:$CLASSPATH"
+exec java -cp $CLASSPATH -jar $DIR/antlr-4.0-complete.jar "$@"
