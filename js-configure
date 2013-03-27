@@ -32,10 +32,22 @@ else
     OPT_OPT="--disable-optimize"
 fi
 
+if [ ! -e $ROOT/js/src/configure ] ; then
+    pushd $ROOT/js/src
+    /usr/local/bin/autoconf213
+    popd
+fi
+
+
 if [[ "$DIR" == *"js"* ]]; then
     CONF_CMD=$ROOT/js/src/configure
 else
     CONF_CMD=$ROOT/configure
+    if [ ! -e $CONF_CMD ] ; then
+        pushd $ROOT
+        /usr/local/bin/autoconf213
+        popd
+    fi
 fi
 
 OPTS_USUAL="--enable-threadsafe --with-system-nspr"
