@@ -12,6 +12,8 @@ echo "DIR: $DIR"
 ROOT=.
 if ! search_parents_for_dotgit ; then
     ROOT=$(dirname $last_git_path);
+elif ! search_parents_for_dothg ; then
+    ROOT=$(dirname $last_hg_path);
 else
     echo "search failed";
     exit 244;
