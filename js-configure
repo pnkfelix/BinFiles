@@ -21,9 +21,9 @@ fi
 echo "ROOT: $ROOT"
 
 if [[ "$DIR" == *"dbg"* ]]; then
-    OPT_DBG="--enable-debug"
+    OPT_DBG="--enable-debug --enable-instruments"
 else
-    OPT_DBG="--disable-debug"
+    OPT_DBG="--disable-debug --disable-instruments"
 fi
 
 if [[ "$DIR" == *"opt"* ]]; then
@@ -51,6 +51,7 @@ else
 fi
 
 OPTS_USUAL="--enable-threadsafe --with-system-nspr"
+# OPTS_USUAL="--enable-threadsafe "
 
 echo "CMD: $CONF_CMD $OPT_DBG $OPT_OPT $OPTS_USUAL"
 
