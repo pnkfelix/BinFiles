@@ -1,4 +1,5 @@
 #!/bin/sh
 
 ME=$(basename $0)
-exec ~/opt/rust/bin/$ME "$@"
+RUST_DIR=rust-dbg-nopt
+exec ~/opt/$RUST_DIR/bin/$ME "$@"
