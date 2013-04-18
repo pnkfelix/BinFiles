@@ -1,4 +1,6 @@
 #!/bin/sh
 
 ME=$(basename $0)
-exec ~/opt/llvm/bin/$ME "$@"
+# DIR=~/opt/llvm/bin
+DIR=/usr/bin
+exec "$DIR/$ME" "$@"
