@@ -1,0 +1,17 @@
+MILESTONE=$1
+ISSUE=$2
+
+if [ "$#" -ne "2" ]; then
+   echo "Usage: $0 <milestone name> <issue>"
+   exit 2
+fi
+
+MSLINE=$(ghi show $ISSUE | grep 'Milestone')
+RET=$?
+if [ "$RET" -ne "0" ] ; then
+    echo "Issue $ISSUE is not marked with Milestone $MILESTONE."
+    exit 3
+fi
+
+ghi comment -m "Not critical for $MILESTONE; de-milestoning" $ISSUE
+ghi edit --no-milestone $ISSUE

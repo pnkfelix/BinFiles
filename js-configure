@@ -36,7 +36,7 @@ else
     CONF_CMD=$ROOT/configure
 fi
 
-OPTS_USUAL="--enable-threadsafe --with-system-nspr"
+OPTS_USUAL="--enable-instruments --enable-threadsafe --with-system-nspr"
 
 echo "CMD: $CONF_CMD $OPT_DBG $OPT_OPT $OPTS_USUAL"
 

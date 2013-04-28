@@ -1,0 +1,40 @@
+# -*- mode: sh; indent-tabs-mode: nil -*-
+
+DIR=$(basename $(pwd))
+echo "DIR: $DIR"
+
+. ~/ConfigFiles/Bash/search_for_repo.sh
+
+ROOT=.
+if ! search_parents_for_dotgit ; then
+    ROOT=$(dirname $last_git_path);
+else
+    echo "search failed";
+    exit 244;
+fi
+echo "ROOT: $ROOT"
+
+
+if [[ "$DIR" == *"dbg"* ]]; then
+    PREFIX_DBG="-dbg"
+    OPT_DBG="--enable-debug-symbols --enable-debug-runtime"
+else
+    PREFIX_DBG=""
+    OPT_DBG="--disable-debug-symbols --disable-debug-runtime"
+fi
+
+if [[ "$DIR" == *"opt"* ]]; then
+    PREFIX_OPT=""
+    OPT_OPT="--enable-optimized"
+else
+    PREFIX_OPT="-nopt"
+    OPT_OPT="--disable-optimized"
+fi
+
+CONF_CMD=$ROOT/configure
+
+OPTS_USUAL=" --enable-libffi --enable-shared --prefix=$(ls -d ~/opt/llvm$PREFIX_DBG$PREFIX_OPT)"
+
+echo "CMD: $CONF_CMD $OPT_DBG $OPT_OPT $OPTS_USUAL"
+
+CC=clang CXX=clang++ "$CONF_CMD" $OPT_DBG $OPT_OPT $OPTS_USUAL
