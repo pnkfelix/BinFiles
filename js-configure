@@ -32,6 +32,11 @@ else
     OPT_OPT="--disable-optimize"
 fi
 
+if [[ "$DIR" == *"gcgen"* ]]; then
+    OPT_GCGEN="--enable-exact-rooting --enable-gcgenerational"
+fi
+
+
 if [ ! -e $ROOT/js/src/configure ] ; then
     pushd $ROOT/js/src
     /usr/local/bin/autoconf213
@@ -53,6 +58,6 @@ fi
 OPTS_USUAL="--enable-threadsafe --with-system-nspr"
 # OPTS_USUAL="--enable-threadsafe "
 
-echo "CMD: $CONF_CMD $OPT_DBG $OPT_OPT $OPTS_USUAL"
+echo "CMD: $CONF_CMD $OPT_DBG $OPT_OPT $OPT_GCGEN $OPTS_USUAL"
 
-CC=clang CXX=clang++ "$CONF_CMD" $OPT_DBG $OPT_OPT $OPTS_USUAL
+CC=clang CXX=clang++ "$CONF_CMD" $OPT_DBG $OPT_OPT $OPT_GCGEN $OPTS_USUAL
