@@ -12,6 +12,8 @@ echo "DIR: $DIR"
 ROOT=.
 if ! search_parents_for_dotgit ; then
     ROOT=$(dirname $last_git_path);
+elif ! search_parents_for_dothg ; then
+    ROOT=$(dirname $last_hg_path);
 else
     echo "search failed";
     exit 244;
@@ -19,6 +21,12 @@ fi
 echo "ROOT: $ROOT"
 
 CONF_CMD=$ROOT/nsprpub/configure
+if [ ! -e $CONF_CMD ] ; then
+    pushd $(dirname $CONF_CMD)
+    /usr/local/bin/autoconf213
+    popd
+fi
+
 
 if [[ "$DIR" == *"dbg"* ]]; then
     OPT_DBG="--enable-debug"

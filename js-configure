@@ -12,6 +12,8 @@ echo "DIR: $DIR"
 ROOT=.
 if ! search_parents_for_dotgit ; then
     ROOT=$(dirname $last_git_path);
+elif ! search_parents_for_dothg ; then
+    ROOT=$(dirname $last_hg_path);
 else
     echo "search failed";
     exit 244;
@@ -19,10 +21,12 @@ fi
 echo "ROOT: $ROOT"
 
 if [[ "$DIR" == *"dbg"* ]]; then
+    # OPT_DBG="--enable-debug --enable-instruments"
     OPT_DBG="--enable-debug"
     NSPR_PREFIX=$(~/opt/nspr-dbg/bin/nspr-config --prefix)
     PREFIX_DBG="-dbg"
 else
+    # OPT_DBG="--disable-debug --disable-instruments"
     OPT_DBG="--disable-debug"
     NSPR_PREFIX=$(~/opt/nspr/bin/nspr-config --prefix)
     PREFIX_DBG=""
@@ -42,11 +46,28 @@ else
     OPT_GENGC=""
 fi
 
+if [[ "$DIR" == *"gcgen"* ]]; then
+    OPT_GCGEN="--enable-exact-rooting --enable-gcgenerational"
+fi
+
+
+if [ ! -e $ROOT/js/src/configure ] ; then
+    pushd $ROOT/js/src
+    /usr/local/bin/autoconf213
+    popd
+fi
+
+
 if [[ "$DIR" == *"js"* ]]; then
     CONF_CMD=$ROOT/js/src/configure
     PFX="js"
 else
     CONF_CMD=$ROOT/configure
+    if [ ! -e $CONF_CMD ] ; then
+        pushd $ROOT
+        /usr/local/bin/autoconf213
+        popd
+    fi
     PFX="ff"
 fi
 

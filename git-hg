@@ -1,0 +1,4 @@
+#!/bin/sh
+
+ME=$(basename $0)
+exec ~/opt/git-hg/bin/$ME "$@"
