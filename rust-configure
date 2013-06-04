@@ -33,7 +33,7 @@ fi
 
 CONF_CMD=$ROOT/configure
 
-OPTS_USUAL=" --enable-clang --prefix=~/opt/rust$PREFIX_DBG$PREFIX_OPT"
+OPTS_USUAL=" --enable-ccache --enable-clang --prefix=~/opt/rust$PREFIX_DBG$PREFIX_OPT"
 
 echo "CMD: $CONF_CMD $OPT_DBG $OPT_OPT $OPTS_USUAL"
 
