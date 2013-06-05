@@ -1,0 +1,3 @@
+BIN=/Applications/Emacs.app/Contents/MacOS/Emacs
+echo $(basename $BIN) $@
+$BIN "$@"
