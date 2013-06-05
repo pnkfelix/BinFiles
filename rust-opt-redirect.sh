@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ME=$(basename $0)
-#RUSTDIR=rust
-#RUSTDIR=rust-dbg-nopt
-RUSTDIR=rust-nopt
-exec ~/opt/$RUSTDIR/bin/$ME "$@"
+#RUST_DIR=rust
+#RUST_DIR=rust-nopt
+RUST_DIR=rust-dbg-nopt
+exec ~/opt/$RUST_DIR/bin/$ME "$@"
