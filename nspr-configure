@@ -1,3 +1,9 @@
+# -*- mode: sh; indent-tabs-mode: nil -*-
+
+# CC=clang CXX=clang++ ../js/src/configure --enable-debug --disable-optimize --enable-threadsafe --with-system-nspr
+
+# CLANG_CC=clang CLANG_CXX=clang++ ../js/src/configure --enable-debug --disable-optimize --enable-threadsafe --with-system-nspr
+
 DIR=$(basename $(pwd))
 echo "DIR: $DIR"
 
@@ -14,9 +20,27 @@ else
 fi
 echo "ROOT: $ROOT"
 
-if [ ! -e $ROOT/nsprpub/configure ] ; then
-    pushd $ROOT/nsprpub
+CONF_CMD=$ROOT/nsprpub/configure
+if [ ! -e $CONF_CMD ] ; then
+    pushd $(dirname $CONF_CMD)
     /usr/local/bin/autoconf213
     popd
 fi
 
+
+if [[ "$DIR" == *"dbg"* ]]; then
+    OPT_DBG="--enable-debug"
+    PREFIX_DBG="-dbg"
+else
+    OPT_DBG="--disable-debug"
+    PREFIX_DBG=""
+fi
+
+PREFIX_OPT=""
+
+OPTS_USUAL="--with-pthreads --host=x86_64-apple-darwin --prefix=~/opt/nspr$PREFIX_DBG$PREFIX_OPT"
+# OPTS_USUAL=""
+
+CMD="$CONF_CMD $OPT_DBG $OPTS_USUAL"
+echo "CMD: CC=clang CXX=clang++ $CMD"
+CC=clang CXX=clang++ $CMD

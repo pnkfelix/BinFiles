@@ -21,15 +21,29 @@ fi
 echo "ROOT: $ROOT"
 
 if [[ "$DIR" == *"dbg"* ]]; then
-    OPT_DBG="--enable-debug --enable-instruments"
+    # OPT_DBG="--enable-debug --enable-instruments"
+    OPT_DBG="--enable-debug"
+    NSPR_PREFIX=$(~/opt/nspr-dbg/bin/nspr-config --prefix)
+    PREFIX_DBG="-dbg"
 else
-    OPT_DBG="--disable-debug --disable-instruments"
+    # OPT_DBG="--disable-debug --disable-instruments"
+    OPT_DBG="--disable-debug"
+    NSPR_PREFIX=$(~/opt/nspr/bin/nspr-config --prefix)
+    PREFIX_DBG=""
 fi
 
 if [[ "$DIR" == *"opt"* ]]; then
     OPT_OPT="--enable-optimize"
+    PREFIX_OPT=""
 else
     OPT_OPT="--disable-optimize"
+    PREFIX_OPT="-nopt"
+fi
+
+if [[ "$DIR" == *"gengc"* ]]; then
+    OPT_GENGC="--enable-gcgenerational --enable-exact-rooting"
+else
+    OPT_GENGC=""
 fi
 
 if [[ "$DIR" == *"gcgen"* ]]; then
@@ -46,6 +60,7 @@ fi
 
 if [[ "$DIR" == *"js"* ]]; then
     CONF_CMD=$ROOT/js/src/configure
+    PFX="js"
 else
     CONF_CMD=$ROOT/configure
     if [ ! -e $CONF_CMD ] ; then
@@ -53,11 +68,12 @@ else
         /usr/local/bin/autoconf213
         popd
     fi
+    PFX="ff"
 fi
 
-OPTS_USUAL="--with-ccache --enable-threadsafe --with-system-nspr"
-# OPTS_USUAL="--enable-threadsafe "
+OPTS_USUAL="--with-ccache --enable-instruments --enable-threadsafe --with-system-nspr --with-nspr-prefix=$NSPR_PREFIX --prefix=~/opt/$PFX$PREFIX_DBG$PREFIX_OPT"
+# OPTS_USUAL="--enable-instruments --enable-threadsafe "
 
-echo "CMD: $CONF_CMD $OPT_DBG $OPT_OPT $OPT_GCGEN $OPTS_USUAL"
-
-CC=clang CXX=clang++ "$CONF_CMD" $OPT_DBG $OPT_OPT $OPT_GCGEN $OPTS_USUAL
+CMD="$CONF_CMD $OPT_DBG $OPT_OPT $OPTS_USUAL"
+echo "CMD: CC=clang CXX=clang++ $CMD"
+CC=clang CXX=clang++ $CMD
