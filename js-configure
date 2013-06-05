@@ -55,7 +55,7 @@ else
     fi
 fi
 
-OPTS_USUAL="--enable-threadsafe --with-system-nspr"
+OPTS_USUAL="--with-ccache --enable-threadsafe --with-system-nspr"
 # OPTS_USUAL="--enable-threadsafe "
 
 echo "CMD: $CONF_CMD $OPT_DBG $OPT_OPT $OPT_GCGEN $OPTS_USUAL"
