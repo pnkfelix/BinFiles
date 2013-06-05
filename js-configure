@@ -57,15 +57,24 @@ if [ ! -e $ROOT/js/src/configure ] ; then
     popd
 fi
 
+AUTOCONF=/usr/local/bin/autoconf213
+if [ ! -e $AUTOCONF ] ; then
+    AUTOCONF=/usr/bin/autoconf2.13
+fi
 
 if [[ "$DIR" == *"js"* ]]; then
     CONF_CMD=$ROOT/js/src/configure
+    if [ ! -e $CONF_CMD ] ; then
+        pushd $(dirname $CONF_CMD)
+        $AUTOCONF
+        popd
+    fi
     PFX="js"
 else
     CONF_CMD=$ROOT/configure
     if [ ! -e $CONF_CMD ] ; then
         pushd $ROOT
-        /usr/local/bin/autoconf213
+        $AUTOCONF
         popd
     fi
     PFX="ff"
