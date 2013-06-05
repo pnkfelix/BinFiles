@@ -7,7 +7,8 @@ GDBBIN=$GDBDIR/bin/gdb
 if [ -e $GDBBIN ] ; then
     echo "Its there"
 else
-    echo "Not there"
+    GDBBIN=/usr/bin/gdb
+    echo "Not there; switching to $GDBBIN"
 fi
 
 exec $GDBBIN "$@"
