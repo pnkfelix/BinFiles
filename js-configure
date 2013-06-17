@@ -40,16 +40,11 @@ else
     PREFIX_OPT="-nopt"
 fi
 
-if [[ "$DIR" == *"gengc"* ]]; then
+if [[ "$DIR" == *"gengc"* || "$DIR" == *"gcgen"* ]]; then
     OPT_GENGC="--enable-gcgenerational --enable-exact-rooting"
 else
     OPT_GENGC=""
 fi
-
-if [[ "$DIR" == *"gcgen"* ]]; then
-    OPT_GCGEN="--enable-exact-rooting --enable-gcgenerational"
-fi
-
 
 if [ ! -e $ROOT/js/src/configure ] ; then
     pushd $ROOT/js/src
@@ -57,23 +52,33 @@ if [ ! -e $ROOT/js/src/configure ] ; then
     popd
 fi
 
+AUTOCONF=/usr/local/bin/autoconf213
+if [ ! -e $AUTOCONF ] ; then
+    AUTOCONF=/usr/bin/autoconf2.13
+fi
 
 if [[ "$DIR" == *"js"* ]]; then
     CONF_CMD=$ROOT/js/src/configure
+    if [ ! -e $CONF_CMD ] ; then
+        pushd $(dirname $CONF_CMD)
+        $AUTOCONF
+        popd
+    fi
     PFX="js"
 else
     CONF_CMD=$ROOT/configure
     if [ ! -e $CONF_CMD ] ; then
         pushd $ROOT
-        /usr/local/bin/autoconf213
+        $AUTOCONF
         popd
     fi
     PFX="ff"
 fi
 
-OPTS_USUAL="--enable-instruments --enable-threadsafe --with-system-nspr --with-nspr-prefix=$NSPR_PREFIX --prefix=~/opt/$PFX$PREFIX_DBG$PREFIX_OPT"
-# OPTS_USUAL="--enable-instruments --enable-threadsafe "
+OPTS_USUAL="--with-ccache --enable-threadsafe --with-system-nspr --with-nspr-prefix=$NSPR_PREFIX --prefix=~/opt/$PFX$PREFIX_DBG$PREFIX_OPT"
 
-CMD="$CONF_CMD $OPT_DBG $OPT_OPT $OPTS_USUAL"
-echo "CMD: CC=clang CXX=clang++ $CMD"
-CC=clang CXX=clang++ $CMD
+CMD="$CONF_CMD $OPT_DBG $OPT_OPT $OPT_GENGC $OPTS_USUAL"
+#echo "CMD: CC=clang CXX=clang++ $CMD"
+#CC=clang CXX=clang++ $CMD
+echo "CMD: $CMD"
+$CMD

@@ -1,3 +1,8 @@
-BIN=/Applications/Emacs.app/Contents/MacOS/bin/emacsclient
+if [ -f /Applications/Emacs.app/Contents/MacOS/bin/emacsclient ]; then
+   BIN=/Applications/Emacs.app/Contents/MacOS/bin/emacsclient
+else
+   BIN=/usr/bin/emacsclient
+fi
+
 echo $(basename $BIN) $@
 $BIN "$@"

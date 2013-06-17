@@ -38,7 +38,13 @@ fi
 
 PREFIX_OPT=""
 
-OPTS_USUAL="--with-pthreads --host=x86_64-apple-darwin --prefix=~/opt/nspr$PREFIX_DBG$PREFIX_OPT"
+if [[ $(uname) == "Darwin" ]]; then
+    OPTS_USUAL="--with-pthreads --host=x86_64-apple-darwin --prefix=~/opt/nspr$PREFIX_DBG$PREFIX_OPT"
+elif [[ $(uname) == "Linux" ]]; then
+    OPTS_USUAL="--with-pthreads --enable-64bit --prefix=~/opt/nspr$PREFIX_DBG$PREFIX_OPT"
+else
+    OPTS_USUAL="--with-pthreads --enable-64bit --prefix=~/opt/nspr$PREFIX_DBG$PREFIX_OPT"
+fi
 # OPTS_USUAL=""
 
 CMD="$CONF_CMD $OPT_DBG $OPTS_USUAL"
