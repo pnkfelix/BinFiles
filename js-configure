@@ -24,11 +24,13 @@ if [[ "$DIR" == *"dbg"* ]]; then
     # OPT_DBG="--enable-debug --enable-instruments"
     OPT_DBG="--enable-debug"
     NSPR_PREFIX=$(~/opt/nspr-dbg/bin/nspr-config --prefix)
+    # NSPR_PREFIX=$(nspr-config --prefix)
     PREFIX_DBG="-dbg"
 else
     # OPT_DBG="--disable-debug --disable-instruments"
     OPT_DBG="--disable-debug"
     NSPR_PREFIX=$(~/opt/nspr/bin/nspr-config --prefix)
+    # NSPR_PREFIX=$(nspr-config --prefix)
     PREFIX_DBG=""
 fi
 
@@ -75,10 +77,23 @@ else
     PFX="ff"
 fi
 
+NSPR_CONFIG=$NSPR_PREFIX/bin/nspr-config
+
+# NSPR_LIBS="$NSPR_PREFIX/lib/libnspr4.dylib $NSPR_PREFIX/lib/libplc4.dylib $NSPR_PREFIX/lib/libplds4.dylib"
+# NSPR_LIBS="-rpath $NSPR_PREFIX/lib"
+NSPR_LIBS=$($NSPR_CONFIG --libs)
+NSPR_CFLAGS=$($NSPR_CONFIG --cflags)
+
+# OPTS_USUAL="--with-ccache --enable-threadsafe --prefix=~/opt/$PFX$PREFIX_DBG$PREFIX_OPT"
+# OPTS_USUAL="--with-ccache --enable-threadsafe --with-system-nspr --with-nspr-prefix=$NSPR_PREFIX --with-nspr-libs=$NSPR_LIBS --prefix=~/opt/$PFX$PREFIX_DBG$PREFIX_OPT"
+# OPTS_USUAL="--with-ccache --enable-threadsafe --with-nspr-cflags=$NSPR_CFLAGS --prefix=~/opt/$PFX$PREFIX_DBG$PREFIX_OPT"
+# OPTS_USUAL="--with-ccache --enable-threadsafe --with-system-nspr"
 OPTS_USUAL="--with-ccache --enable-threadsafe --with-system-nspr --with-nspr-prefix=$NSPR_PREFIX --prefix=~/opt/$PFX$PREFIX_DBG$PREFIX_OPT"
 
 CMD="$CONF_CMD $OPT_DBG $OPT_OPT $OPT_GENGC $OPTS_USUAL"
 #echo "CMD: CC=clang CXX=clang++ $CMD"
 #CC=clang CXX=clang++ $CMD
-echo "CMD: $CMD"
-$CMD
+#echo "CMD: " $CMD --with-nspr-libs="$($NSPR_CONFIG --libs)"
+#$CMD --with-nspr-libs="$($NSPR_CONFIG --libs)"
+echo "CMD: " $CMD 
+$CMD 
