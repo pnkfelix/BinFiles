@@ -1,7 +1,6 @@
 #!/bin/sh
 
 ME=$(basename $0)
->>>>>>> master
 DIR=/usr/bin
 # DIR=~/opt/llvm-dbg-nopt/bin
 # DIR=~/opt/llvm/bin
