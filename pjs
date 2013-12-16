@@ -1,0 +1,6 @@
+#!/bin/sh
+
+ME=js
+PJS_DIR=$HOME/Dev/Mozilla/iontrail/objdir-dbg-js
+# PJS_DIR=$HOME/Dev/Mozilla/iontrail/objdir-opt-js
+exec $PJS_DIR/$ME "$@"
