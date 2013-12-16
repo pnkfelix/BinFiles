@@ -1,0 +1,1 @@
+PATH=$(ls -d /usr/local/Cellar/*/*/bin | xargs | sed -e 's/ /:/g'):$PATH autoreconf  -i
