@@ -1,0 +1,1 @@
+/Applications/Racket\ v5.3.6/Slideshow.app/Contents/MacOS/Slideshow --keep-titlebar -s 800 600 "$@"
