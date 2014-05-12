@@ -1,0 +1,54 @@
+#!/bin/sh
+
+set -x
+set -e
+
+shopt -s nullglob # nullglob enables foo* expanding to empty if no matches
+
+SRC=$1
+TGT=$2
+
+git clone $SRC $TGT
+
+### Would like to avoid re-downloading git repo's for submodules if possible,
+### but this simple loop is not putting the appropriate state into place,
+### unfortunately
+###
+# for d in $SRC/src/{compiler-rt,gyp,libuv,llvm} ; do
+#     if [ -e $d ] ; then
+#        (cd $d && tar cf - .) | (cd $TGT/src/$(basename $d) && tar xf -)
+#     fi
+# done
+for d in $SRC/src/{compiler-rt,gyp,libuv,llvm} ; do
+    if [ -e $d ] ; then
+       git clone $d $TGT/src/$(basename $d)
+       URL=$( cd $d && git remote -v | grep ' (fetch)' | cut -f 2 | sed -e 's/ (fetch)//' )
+       (cd $TGT/src/$(basename $d) && git remote set-url origin $URL )
+    fi
+done
+
+
+for d in $SRC/objdir-dbgopt $SRC/objdir-dbg ; do
+    mkdir -v $TGT/$(basename $d)
+    if [ -e $d/dl ] ; then
+       mkdir $TGT/$(basename $d)/dl
+       (cd $d/dl && tar cf - .) | (cd $TGT/$(basename $d)/dl && tar xf - )
+    fi
+done
+
+for d in $TGT/objdir-* ; do
+    pushd $d
+    rust-configure
+    popd
+done
+
+pushd $TGT
+git remote add  moz-gh git://github.com/mozilla/rust.git
+git remote add  pnk-gh git@github.com:pnkfelix/rust.git
+git remote add huon-gh git@github.com:huonw/rust.git
+git remote add alex-gh git@github.com:alexcrichton/rust.git
+git remote add brsn-gh git@github.com:brson/rust.git
+git remote add niko-gh git@github.com:nikomatsakis/rust.git
+git remote add  cmr-gh git@github.com:cmr/rust.git
+git remote add   eb-gh git@github.com:eddyb/rust.git
+popd
