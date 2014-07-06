@@ -1,0 +1,45 @@
+set -e
+
+DIR=$(basename $(pwd))
+echo "DIR: $DIR"
+
+. ~/ConfigFiles/Bash/search_for_repo.sh
+
+
+ROOT=.
+if ! search_parents_for_dotgit ; then
+    ROOT=$(dirname $last_git_path);
+else
+    echo "search failed";
+    exit 244;
+fi
+echo "ROOT: $ROOT"
+
+CFLAGS=""
+if [[ "$DIR" == *"dbg"* ]]; then
+    PREFIX_DBG="-dbg"
+    OPT_DBG=""
+    CFLAGS="$CFLAGS -g "
+else
+    PREFIX_DBG=""
+    OPT_DBG=""
+fi
+
+if [[ "$DIR" == *"opt"* ]]; then
+    PREFIX_OPT=""
+    OPT_OPT=""
+    CFLAGS="$CFLAGS -O2 "
+else
+    PREFIX_OPT="-nopt"
+    OPT_OPT=""
+fi
+
+PREFIX_VER=$(git rev-parse --abbrev-ref HEAD)
+
+CONF_CMD=$ROOT/configure
+
+OPTS_USUAL=" --disable-video-x11 --without-x --prefix=$HOME/opt/sdl-$PREFIX_VER$PREFIX_DBG$PREFIX_OPT"
+
+echo "CMD: $CONF_CMD $OPT_DBG $OPT_OPT $OPTS_USUAL"
+
+CFLAGS="$CFLAGS" CC=clang CXX=clang++ "$CONF_CMD" $OPT_DBG $OPT_OPT $OPTS_USUAL
