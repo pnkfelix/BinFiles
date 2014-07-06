@@ -1,0 +1,6 @@
+#!/bin/sh
+
+SYNTAX_LIB=x86_64-apple-darwin/stage0/lib/rustlib/x86_64-apple-darwin/lib/stamp.syntax
+RUSTC_BIN=x86_64-apple-darwin/stage1/bin/rustc
+RUSTC_AND_ITS_SUPPORT=rustc-stage1
+remake $SYNTAX_LIB $RUSTC_BIN $RUSTC_AND_ITS_SUPPORT
