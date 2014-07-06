@@ -19,11 +19,12 @@ git clone $SRC $TGT
 #        (cd $d && tar cf - .) | (cd $TGT/src/$(basename $d) && tar xf -)
 #     fi
 # done
-for d in $SRC/src/{compiler-rt,gyp,libuv,llvm} ; do
+for e in $SRC/src/{compiler-rt,gyp,libuv,llvm,jemalloc,rt/hoedown} ; do
+    d=$SRC/src/$e
     if [ -e $d ] ; then
-       git clone $d $TGT/src/$(basename $d)
+       git clone $d $TGT/src/$e
        URL=$( cd $d && git remote -v | grep ' (fetch)' | cut -f 2 | sed -e 's/ (fetch)//' )
-       (cd $TGT/src/$(basename $d) && git remote set-url origin $URL )
+       (cd $TGT/src/$e && git remote set-url origin $URL )
     fi
 done
 
