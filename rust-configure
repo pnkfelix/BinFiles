@@ -31,10 +31,19 @@ else
     OPT_OPT="--disable-optimize"
 fi
 
+if [[ "$DIR" == *"droid"* ]]; then
+    PREFIX_DROID="-droid"
+    OPT_TGT="--target=arm-linux-androideabi --android-cross-path=$HOME/opt/ndk_standalone"
+else
+    PREFIX_DROID=""
+    OPT_TGT=""
+fi
+
 CONF_CMD=$ROOT/configure
 
 OPTS_USUAL=" --enable-ccache --enable-clang --prefix=~/opt/rust$PREFIX_DBG$PREFIX_OPT"
 
-echo "CMD: $CONF_CMD $OPT_DBG $OPT_OPT $OPTS_USUAL"
+echo "CMD: $CONF_CMD $OPT_DBG $OPT_OPT $OPT_TGT $OPTS_USUAL $*"
 
-CC=clang CXX=clang++ "$CONF_CMD" $OPT_DBG $OPT_OPT $OPTS_USUAL
+# CC=clang CXX=clang++ 
+"$CONF_CMD" $OPT_DBG $OPT_OPT $OPT_TGT $OPTS_USUAL $*
