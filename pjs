@@ -1,8 +1,10 @@
 #!/bin/sh
 
 ME=js
-PJS_DIR=$HOME/Dev/Mozilla/mozilla-inbound/objdir-opt-js
+# PJS_DIR=$HOME/Dev/Mozilla/mozilla-inbound/objdir-opt-js
+# PJS_DIR=$HOME/Dev/Mozilla/iontrail/objdir-dbg-js
 # PJS_DIR=$HOME/Dev/Mozilla/iontrail/objdir-opt-js
+PJS_DIR=$HOME/Dev/Mozilla/mozilla-inbound/objdir-opt-js/js/src/shell
 
 BIN=$PJS_DIR/$ME
 if [ -f $BIN ] ; then
