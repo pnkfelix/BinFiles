@@ -1,6 +1,15 @@
 #!/bin/sh
 
 ME=js
-PJS_DIR=$HOME/Dev/Mozilla/iontrail/objdir-dbg-js
+PJS_DIR=$HOME/Dev/Mozilla/mozilla-inbound/objdir-opt-js
 # PJS_DIR=$HOME/Dev/Mozilla/iontrail/objdir-opt-js
-exec $PJS_DIR/$ME "$@"
+
+BIN=$PJS_DIR/$ME
+if [ -f $BIN ] ; then
+    true
+else
+    BIN=$PJS_DIR/js/src/shell/js
+fi
+
+echo using $BIN
+exec $BIN "$@"
