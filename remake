@@ -1,2 +1,23 @@
 #!/bin/sh
-exec ~/opt-remake/bin/remake $@
+
+ME=$(basename $0)
+REMAKE_DIR=~/opt-remake
+
+WHERE=$REMAKE_DIR/$ME
+
+if [ ! -e $WHERE ]; then
+    REMAKE_DIR=/usr/local/bin
+    WHERE=$REMAKE_DIR/$ME
+fi
+
+if [ ! -e $WHERE ]; then
+    echo "Could not find remake in any standard location.";
+    exit 1
+fi
+
+if [ $1 == "--where" ] ; then
+    echo "$WHERE";
+    exit;
+fi
+
+exec $WHERE $@
