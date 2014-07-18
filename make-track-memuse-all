@@ -1,0 +1,25 @@
+#!/bin/sh
+
+STAGE2=x86_64-apple-darwin/stage2
+SAMPLE=$STAGE2/lib/rustlib/x86_64-apple-darwin/lib/stamp.rustc
+
+if [ "$#" -eq 0 ]; then
+    echo "You must provide an expect target so that we can remove it first"
+    echo "An example reasonable target is: "
+    echo "  $SAMPLE"
+    exit 1
+fi
+
+TARGET=$1
+
+# STATS=PID,COMMAND,CPU,TIME,MEM,RPRVT,VPRVT,VSIZE,FAULTS,COW,PAGEINS,USER
+STATS=PID,COMMAND,CPU,TIME,MEM,RPRVT,VPRVT,VSIZE,FAULTS,PAGEINS
+
+rm -f $TARGET
+time make $TARGET &
+sleep 1
+/usr/bin/top -l 1 -stats $STATS -pid $(pgrep rustc) | tail -2
+while ( pgrep rustc > /dev/null ) ; do
+    sleep 9
+    /usr/bin/top -l 1 -stats $STATS -pid $(pgrep rustc) | tail -1
+done

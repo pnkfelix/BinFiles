@@ -1,0 +1,47 @@
+#!/bin/sh
+
+STAGE2=x86_64-apple-darwin/stage2
+SAMPLE=$STAGE2/lib/rustlib/x86_64-apple-darwin/lib/stamp.rustc
+
+if [ "$#" -eq 0 ]; then
+    echo "You must provide an expect target so that we can remove it first"
+    echo "An example reasonable target is: "
+    echo "  $SAMPLE"
+    exit 1
+fi
+
+TARGET=$1
+
+# STATS=PID,COMMAND,CPU,TIME,MEM,RPRVT,VPRVT,VSIZE,FAULTS,COW,PAGEINS,USER
+STATS=PID,COMMAND,CPU,TIME,MEM,RPRVT,VPRVT,VSIZE,FAULTS,PAGEINS
+
+if ( pgrep rustc > /dev/null ); then
+    echo "You cannot run this script while any other rustc is in progress."
+    echo "pgrep finds the following rustc processes."
+    pgrep rustc
+    exit
+fi
+
+if [ ! -e $TARGET ]; then
+    echo "Warning: it seems like target does not pre-exist."
+    echo "target is $TARGET"
+    echo "You should consider building to the point where target"
+    echo "exists before running this script, to ensure that all of"
+    echo "its prerequisites have been built already.  (But we will"
+    echo "continue nonetheless after a second, under the assumption"
+    echo "that you already have the prerequisites ready.)"
+    sleep 1
+fi
+
+rm -f $TARGET
+time make $TARGET &
+sleep 1
+RUSTC_PID=$(pgrep rustc)
+RUSTC_PID_FILE=/tmp/rustc_pid.$$
+echo "Storing tracked pid $RUSTC_PID in $RUSTC_PID_FILE"
+echo $RUSTC_PID > $RUSTC_PID_FILE
+/usr/bin/top -l 1 -stats $STATS -pid $RUSTC_PID | tail -2
+while ( pgrep -F $RUSTC_PID_FILE > /dev/null ) ; do
+    sleep 9
+    /usr/bin/top -l 1 -stats $STATS -pid $RUSTC_PID | tail -1
+done

@@ -1,1 +1,1 @@
-/usr/local/Cellar/pkg-config/0.28/bin/pkg-config
+/usr/local/Cellar/pkg-config/0.28/bin/pkg-config $@
