@@ -1,0 +1,2 @@
+COMMIT=$1
+git rev-list --all --not $COMMIT^@ --children | grep "^$COMMIT"
