@@ -1,0 +1,23 @@
+#!/bin/sh
+ARCH=x86_64-apple-darwin
+STAGE_DIR=$ARCH/stage2
+
+SYNTAX_LIB=$STAGE_DIR/lib/rustlib/$ARCH/lib/stamp.syntax
+RUSTC_LIB=$STAGE_DIR/lib/rustlib/$ARCH/lib/stamp.rustc
+RUSTC_BIN=$STAGE_DIR/bin/rustc
+
+if [ "$1" == "--no-libs" ] ; then
+    OBJ_LIBS_TARGET=""
+    END_MSG="Done; you can run $RUSTC_BIN on source code with #![no_std]"
+else
+    OBJ_LIBS_TARGET="$SYNTAX_LIB $RUSTC_LIB rustc-stage2 "
+    END_MSG="Done; you can run $RUSTC_BIN on source code using libstd crate"
+fi
+
+
+CMD="remake --trace $RUSTC_BIN $OBJ_LIBS_TARGET"
+echo $CMD
+exec $CMD
+
+echo $END_MSG
+# DYLD_LIBRARY_PATH=/Users/fklock/Dev/Mozilla/rust-nzdrop/objdir-dbgopt/x86_64-apple-darwin/stage1/lib:$DYLD_LIBRARY_PATH   x86_64-apple-darwin/stage1/bin/rustc
