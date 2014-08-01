@@ -1,7 +1,13 @@
-if [ -f /Applications/Emacs.app/Contents/MacOS/bin/emacsclient ]; then
-   BIN=/Applications/Emacs.app/Contents/MacOS/bin/emacsclient
+APP_BIN=/Applications/Emacs.app/Contents/MacOS/bin/emacsclient
+APP_10_9_BIN=/Applications/Emacs.app/Contents/MacOS/bin-x86_64-10.9/emacsclient
+USR_BIN=/usr/bin/emacsclient
+
+if [ -f $APP_BIN ]; then
+   BIN=$APP_BIN
+elif [ -f $APP_10_9_BIN ]; then
+   BIN=$APP_10_9_BIN
 else
-   BIN=/usr/bin/emacsclient
+   BIN=$USR_BIN
 fi
 
 echo $(basename $BIN) $@
