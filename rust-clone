@@ -10,21 +10,11 @@ TGT=$2
 
 git clone $SRC $TGT
 
-### Would like to avoid re-downloading git repo's for submodules if possible,
-### but this simple loop is not putting the appropriate state into place,
-### unfortunately
-###
-# for d in $SRC/src/{compiler-rt,gyp,libuv,llvm} ; do
-#     if [ -e $d ] ; then
-#        (cd $d && tar cf - .) | (cd $TGT/src/$(basename $d) && tar xf -)
-#     fi
-# done
-for e in $SRC/src/{compiler-rt,gyp,libuv,llvm,jemalloc,rt/hoedown} ; do
-    d=$SRC/src/$e
-    if [ -e $d ] ; then
-       git clone $d $TGT/src/$e
-       URL=$( cd $d && git remote -v | grep ' (fetch)' | cut -f 2 | sed -e 's/ (fetch)//' )
-       (cd $TGT/src/$e && git remote set-url origin $URL )
+for d in compiler-rt gyp libuv llvm jemalloc rt/hoedown ; do
+    SRC_D=$SRC/src/$d
+    if [ -e $SRC_D ] ; then
+        URL=$( cd $SRC_D && git config remote.origin.url )
+        git clone --reference $SRC_D -- $URL $TGT/src/$d
     fi
 done
 
