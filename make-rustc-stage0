@@ -1,0 +1,11 @@
+#!/bin/sh
+ARCH=x86_64-apple-darwin
+STAGE_DIR=$ARCH/stage0
+
+SYNTAX_LIB=$STAGE_DIR/lib/rustlib/$ARCH/lib/stamp.syntax
+RUSTC_LIB=$STAGE_DIR/lib/rustlib/$ARCH/lib/stamp.rustc
+RUSTC_BIN=$STAGE_DIR/bin/rustc
+
+CMD="remake $SYNTAX_LIB $RUSTC_LIB $RUSTC_BIN "
+echo $CMD
+exec $CMD

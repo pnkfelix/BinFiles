@@ -5,6 +5,8 @@ STAGE=$1
 DIR=$(basename $(pwd))
 echo "DIR: $DIR"
 
+set -e
+
 . ~/ConfigFiles/Bash/search_for_repo.sh
 
 ROOT=.
@@ -33,7 +35,7 @@ else
 fi
 
 
-CMD="remake --trace $RUSTC_BIN $OBJ_LIBS_TARGET"
+CMD="remake --trace $RUSTC_BIN $OBJ_LIBS_TARGET "
 echo $CMD
 $CMD
 
