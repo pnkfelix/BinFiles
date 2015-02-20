@@ -1,0 +1,1 @@
+exec $HOME/opt/sdl-master-dbg-nopt/bin/sdl2-config "$@"
