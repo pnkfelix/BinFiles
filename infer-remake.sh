@@ -1,15 +1,20 @@
-if [ -e Makefile ]
-then
-    if ( echo $(pwd) | grep rust > /dev/null );
-    then
-        CMD="time remake -j1"
-    else
-        CMD="time remake -j8"
-    fi
-elif [ -e Cargo.toml ]
-then
-    CMD="time cargo test -- --nocapture"
-fi
+#!/bin/bash
 
-echo "$CMD"
-$CMD
+DIR="."
+
+while true; do
+    if [ -e "$DIR/Cargo.toml" ]; then
+        CMD="cd $DIR && cargo build && cargo test"
+        MSG='(flags of interest include `--verbose` and `-- --nocapture`)'
+        break;
+    elif [ -e "$DIR/Makefile" ]; then
+        CMD="time remake -C $DIR -j1"
+        MSG='(flags of interest include `--trace`)'
+        break;
+    fi
+done
+
+echo "$CMD $@"
+echo "$MSG"
+echo
+eval "$CMD" "$@"
