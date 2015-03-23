@@ -39,9 +39,16 @@ else
     OPT_TGT=""
 fi
 
+UNAME=$(uname)
+if [[ "$UNAME" == "Linux" ]] ; then
+    CLANG_OPT=""
+else
+    CLANG_OPT="--enable-clang"
+fi
+
 CONF_CMD=$ROOT/configure
 
-OPTS_USUAL=" --enable-ccache --enable-clang --prefix=~/opt/rust$PREFIX_DBG$PREFIX_OPT"
+OPTS_USUAL=" --enable-ccache $CLANG_OPT --prefix=~/opt/rust$PREFIX_DBG$PREFIX_OPT"
 
 echo "CMD: $CONF_CMD $OPT_DBG $OPT_OPT $OPT_TGT $OPTS_USUAL $*"
 
