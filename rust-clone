@@ -34,7 +34,7 @@ for d in $TGT/objdir-* ; do
 done
 
 pushd $TGT
-git remote add  moz-gh git://github.com/mozilla/rust.git
+git remote add  moz-gh git://github.com/rust-lang/rust.git
 git remote add  pnk-gh git@github.com:pnkfelix/rust.git
 git remote add huon-gh git@github.com:huonw/rust.git
 git remote add alex-gh git@github.com:alexcrichton/rust.git

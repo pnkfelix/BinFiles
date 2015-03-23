@@ -1,0 +1,6 @@
+. ~/ConfigFiles/Bash/search_for_repo.sh
+
+OUTPUT=/tmp/$(parse_just_git_branch).patch
+echo output to $OUTPUT
+echo
+git log moz-master..HEAD --no-color --reverse --stat --patch > $OUTPUT &&  git log moz-master..HEAD --reverse --oneline

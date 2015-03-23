@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# defaults write com.apple.CrashReporter DialogType none
+# defaults write com.apple.CrashReporter DialogType developer
+# defaults write com.apple.CrashReporter DialogType server
+defaults write com.apple.CrashReporter DialogType basic

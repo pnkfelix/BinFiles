@@ -1,0 +1,23 @@
+#!/bin/sh
+# -*- mode: sh -*- 
+
+for f in $* ; do 
+    if [ ! -f $f ]; then
+        echo $(basename $0) error, file not found: $f
+        exit 1
+    fi
+done
+
+for f in $* ; do 
+    if [ -f $f ]; then
+        echo resetting timestamp of $f
+        echo old: $(ls -lT $f)
+        touch -t 199901010101 $f
+        echo new: $(ls -lT $f)
+    else
+        echo $(basename $0) error, file not found: $f
+        exit 1
+    fi
+done
+
+
