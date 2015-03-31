@@ -100,9 +100,16 @@ else
     DROID_OPT=""
 fi
 
+UNAME=$(uname)
+if [[ "$UNAME" == "Linux" ]] ; then
+    CLANG_OPT=""
+else
+    CLANG_OPT="--enable-clang"
+fi
+
 CONF_CMD=$ROOT/configure
 
-OPTS_USUAL=" --enable-ccache --enable-clang --prefix=~/opt/rust$PREFIX_DBG$PREFIX_OPT$PREFIX_X32$PREFIX_DROID"
+OPTS_USUAL=" --enable-ccache $CLANG_OPT --prefix=~/opt/rust$PREFIX_DBG$PREFIX_OPT$PREFIX_X32$PREFIX_DROID"
 
 echo "CMD: $CONF_CMD $OPT_DBG $OPT_OPT $DROID_OPT $X32_OPT $OPTS_USUAL $*"
 
