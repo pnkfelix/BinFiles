@@ -31,19 +31,80 @@ else
     OPT_OPT="--disable-optimize"
 fi
 
+
+## Cribbed from the platform detection in `configure`,
+
+CFG_OSTYPE=$(uname -s)
+
+# The goal here is to come up with the same triple as LLVM would,
+# at least for the subset of platforms we're willing to target.
+
+case $CFG_OSTYPE in
+
+    Linux)
+        CFG_OSTYPE=unknown-linux-gnu
+        ;;
+
+    FreeBSD)
+        CFG_OSTYPE=unknown-freebsd
+        ;;
+
+    Darwin)
+        CFG_OSTYPE=apple-darwin
+        ;;
+
+    MINGW32*)
+        CFG_OSTYPE=pc-mingw32
+        ;;
+# Thad's Cygwin identifers below
+
+#   Vista 32 bit
+    CYGWIN_NT-6.0)
+        CFG_OSTYPE=pc-mingw32
+        ;;
+
+#   Vista 64 bit
+    CYGWIN_NT-6.0-WOW64)
+        CFG_OSTYPE=w64-mingw32
+        ;;
+
+#   Win 7 32 bit
+    CYGWIN_NT-6.1)
+        CFG_OSTYPE=pc-mingw32
+        ;;
+
+#   Win 7 64 bit
+    CYGWIN_NT-6.1-WOW64)
+        CFG_OSTYPE=w64-mingw32
+        ;;
+
+# We do not detect other OS such as XP/2003 using 64 bit using uname.
+# If we want to in the future, we will need to use Cygwin - Chuck's csih helper in /usr/lib/csih/winProductName.exe or alternative.
+    *)
+        err "unknown OS type: $CFG_OSTYPE"
+        ;;
+esac
+    
+if [[ "$DIR" == *"x32"* ]]; then
+    PREFIX_X32="-x32"
+    X32_OPT="--target=i686-$CFG_OSTYPE"
+else
+    X32_OPT="--disable-optimize"
+fi
+
 if [[ "$DIR" == *"droid"* ]]; then
     PREFIX_DROID="-droid"
-    OPT_TGT="--target=arm-linux-androideabi --android-cross-path=$HOME/opt/ndk_standalone"
+    DROID_OPT="--target=arm-linux-androideabi --android-cross-path=$HOME/opt/ndk_standalone"
 else
     PREFIX_DROID=""
-    OPT_TGT=""
+    DROID_OPT=""
 fi
 
 CONF_CMD=$ROOT/configure
 
-OPTS_USUAL=" --enable-ccache --enable-clang --prefix=~/opt/rust$PREFIX_DBG$PREFIX_OPT"
+OPTS_USUAL=" --enable-ccache --enable-clang --prefix=~/opt/rust$PREFIX_DBG$PREFIX_OPT$PREFIX_X32$PREFIX_DROID"
 
-echo "CMD: $CONF_CMD $OPT_DBG $OPT_OPT $OPT_TGT $OPTS_USUAL $*"
+echo "CMD: $CONF_CMD $OPT_DBG $OPT_OPT $DROID_OPT $X32_OPT $OPTS_USUAL $*"
 
 # CC=clang CXX=clang++ 
-"$CONF_CMD" $OPT_DBG $OPT_OPT $OPT_TGT $OPTS_USUAL $*
+         "$CONF_CMD" $OPT_DBG $OPT_OPT $DROID_OPT $X32_OPT $OPTS_USUAL $*
