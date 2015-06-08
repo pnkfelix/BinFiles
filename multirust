@@ -1,3 +1,15 @@
 #!/bin/sh
 
-~/opt/multirust/bin/multirust "$@"
+ME=$(basename $0)
+
+DIR=~/opt/$ME
+WHERE=$DIR/bin/$ME
+
+if [ "$1" == "--where" ] ; then
+    echo "$WHERE";
+    exit;
+fi
+
+export LD_LIBRARY_PATH=$DIR/lib:$LD_LIBRARY_PATH
+
+exec "$WHERE" "$@"

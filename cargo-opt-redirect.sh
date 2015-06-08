@@ -1,7 +1,8 @@
 #!/bin/sh
 
 ME=$(basename $0)
-CARGO_DIR=cargo-dbg
+# CARGO_DIR=cargo-dbg
+CARGO_DIR=multirust
 
 DIR=~/opt/$CARGO_DIR
 WHERE=$DIR/bin/$ME
