@@ -1,1 +1,15 @@
-exec /usr/local/Cellar/*/*/bin/autoconf213 "$@"
+#!/bin/sh
+
+CFG_OSTYPE=$(uname -s)
+
+case $CFG_OSTYPE in
+
+     Darwin)
+	exec /usr/local/Cellar/*/*/bin/autoconf213 "$@"
+	;;
+
+     Linux)
+	exec /usr/bin/autoconf-2.13 "$@"
+	;;
+esac
+

@@ -1,1 +1,20 @@
-exec /usr/local/Cellar/*/*/bin/automake "$@"
+#!/bin/sh
+
+CFG_OSTYPE=$(uname -s)
+
+case $CFG_OSTYPE in
+
+    Darwin)
+        exec /usr/local/Cellar/*/*/bin/automake "$@"
+	;;
+
+    Linux)
+	exec /usr/bin/automake "$@"
+	;;
+
+    *)
+	echo "Unhandled OS: $CFG_OSTYPE"
+	exit 1
+	;;
+esac
+

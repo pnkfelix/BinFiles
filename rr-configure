@@ -1,0 +1,14 @@
+#!/bin/sh
+
+if [ "$#" -eq 0 ]; then
+    echo "You must provide the path to the rr source tree as an argument"
+    echo ""
+    echo "If this objdir is a subdirectory of the source tree, then you"
+    echo "must provide an absolute path to the rr source tree."
+    exit 1
+fi
+
+CMD="cmake -DCMAKE_INSTALL_PREFIX:PATH=$HOME/opt/rr $1"
+
+echo $CMD
+$CMD
