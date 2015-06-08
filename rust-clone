@@ -42,7 +42,7 @@ git remote add brsn-gh git@github.com:brson/rust.git
 git remote add niko-gh git@github.com:nikomatsakis/rust.git
 git remote add  pcw-gh git@github.com:pcwalton/rust.git
 git remote add  cmr-gh git@github.com:cmr/rust.git
-git remote add   eb-gh git@github.com:eddyb/rust.git
+git remote add   eddyb-gh git@github.com:eddyb/rust.git
 git remote add zwarich-gh git@github.com:zwarich/rust.git
 git remote add  nrc-gh git@github.com:nick29581/rust.git
 popd

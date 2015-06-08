@@ -4,5 +4,6 @@ BRANCH=$(parse_just_git_branch)
 OUTPUT=/tmp/$BRANCH.diff
 echo output to $OUTPUT
 echo
-git diff moz-master $BRANCH --no-color > $OUTPUT
+git diff moz-master $BRANCH --no-color --stat > $OUTPUT
+git diff moz-master $BRANCH --no-color >> $OUTPUT
 git diff moz-master $BRANCH --no-color --stat

@@ -6,7 +6,8 @@ ME=$(basename $0)
 RUST_DIR=rust
 #RUST_DIR=rust-nopt
 #RUST_DIR=rust-dbg-nopt
-RUST_DIR=rust-dbg
+# RUST_DIR=rust-dbg
+RUST_DIR=multirust
 # RUST_DIR=releases/rust-0.12.0-x86_64-apple-darwin
 
 CARGO_DIR=cargo
