@@ -3,11 +3,12 @@
 ME=$(basename $0)
 # ME=rustc
 
-RUST_DIR=rust
+#RUST_DIR=rust
 #RUST_DIR=rust-nopt
 #RUST_DIR=rust-dbg-nopt
-RUST_DIR=rust-dbg
+#RUST_DIR=rust-dbg
 # RUST_DIR=releases/rust-0.12.0-x86_64-apple-darwin
+RUST_DIR=multirust
 
 CARGO_DIR=cargo
 
