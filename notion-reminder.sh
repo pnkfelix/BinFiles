@@ -1,0 +1,18 @@
+#!/bin/sh
+
+echo "F2               open X terminal"
+echo "Mod1+K K         list clients; released Mod1 then arrows select"
+echo "Mod1+K+K+...     list clients; held Mod1 then repeated K selects"
+echo "Mod1+R           resize mode (via barrows)"
+echo "Mod1+K Tab       go left"
+echo "Mod1+K 1-0       go to numbered tab"
+echo "Mod1+K P         go to prev tab"
+echo "Mod1+K N         go to next tab"
+echo "Mod1+K ,         move tab left"
+echo "Mod1+K .         move tab right"
+echo "Mod1+K S         split horizontally"
+echo "Mod1+K X         merge with sibling"
+echo "Mod1+K C         kill client owning the client window"
+echo "Mod1+K Q         send next key to client. (Not supported by all clients.)"
+echo "Mod1+Return      toggle fullscreen"
+echo "Mod1+C           close current object"
