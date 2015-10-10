@@ -1,1 +1,1 @@
-sudo cpupower frequency-set -g performance
+cpupower frequency-set -g performance

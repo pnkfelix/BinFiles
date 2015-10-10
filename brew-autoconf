@@ -1,1 +1,20 @@
-exec /usr/local/Cellar/*/*/bin/autoconf "$@"
+#!/bin/sh
+
+CFG_OSTYPE=$(uname -s)
+
+case $CFG_OSTYPE in
+
+    Darwin)
+	exec /usr/local/Cellar/*/*/bin/autoconf "$@"
+	;;
+    
+    Linux)
+	exec /usr/bin/autoconf "$@"
+	;;
+    
+    *)
+	echo "Unhandled OS: $CFG_OSTYPE"
+	exit 1
+	;;
+esac
+

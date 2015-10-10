@@ -89,7 +89,7 @@ if [[ "$DIR" == *"x32"* ]]; then
     PREFIX_X32="-x32"
     X32_OPT="--target=i686-$CFG_OSTYPE"
 else
-    X32_OPT="--disable-optimize"
+    X32_OPT=""
 fi
 
 if [[ "$DIR" == *"droid"* ]]; then
@@ -100,6 +100,23 @@ else
     DROID_OPT=""
 fi
 
+
+RELEASECHANNEL_OPT=
+case $DIR in
+    *dev)
+        RELEASECHANNEL_OPT="--release-channel=dev"
+        ;;
+    *nightly)
+        RELEASECHANNEL_OPT="--release-channel=nightly"
+        ;;
+    *beta)
+        RELEASECHANNEL_OPT="--release-channel=beta"
+        ;;
+    *stable)
+        RELEASECHANNEL_OPT="--release-channel=stable"
+        ;;
+esac
+
 UNAME=$(uname)
 if [[ "$UNAME" == "Linux" ]] ; then
     CLANG_OPT=""
@@ -107,11 +124,29 @@ else
     CLANG_OPT="--enable-clang"
 fi
 
+# Some defaults suggested by alexcrichton for speeding up my
+# development times (but trying to keep the generated configure
+# invocation human-readable).
+TESTSOPT_OPT=--disable-optimize-tests
+LLVMASSERTS_OPT=--disable-llvm-assertions
+for o in $*; do
+    if [[ "$o" == *"--enable-optimize-tests"* ]]; then
+        TESTSOPT_OPT=
+    fi
+
+    if [[ "$o" == *"--enable-llvm-assertions"* ]]; then
+        LLVMASSERTS_OPT=
+    fi
+done
+
+
 CONF_CMD=$ROOT/configure
 
-OPTS_USUAL=" --enable-ccache $CLANG_OPT --prefix=~/opt/rust$PREFIX_DBG$PREFIX_OPT$PREFIX_X32$PREFIX_DROID"
+OPTS_USUAL=" --enable-ccache $CLANG_OPT --prefix=~/opt/rust$PREFIX_DBG$PREFIX_OPT$PREFIX_X32$PREFIX_DROID $TESTSOPT_OPT $LLVMASSERTS_OPT"
 
-echo "CMD: $CONF_CMD $OPT_DBG $OPT_OPT $DROID_OPT $X32_OPT $OPTS_USUAL $*"
+ALL_OPTS="$OPT_DBG $OPT_OPT $DROID_OPT $X32_OPT $RELEASECHANNEL_OPT $OPTS_USUAL $*"
 
-# CC=clang CXX=clang++ 
-         "$CONF_CMD" $OPT_DBG $OPT_OPT $DROID_OPT $X32_OPT $OPTS_USUAL $*
+echo "CMD: $CONF_CMD $ALL_OPTS"
+
+# CC=clang CXX=clang++
+         "$CONF_CMD" $ALL_OPTS

@@ -1,8 +1,11 @@
 . ~/ConfigFiles/Bash/search_for_repo.sh
 
+MASTER=${1:-moz-master}
+
 BRANCH=$(parse_just_git_branch)
 OUTPUT=/tmp/$BRANCH.diff
 echo output to $OUTPUT
 echo
-git diff moz-master $BRANCH --no-color > $OUTPUT
-git diff moz-master $BRANCH --no-color --stat
+git diff $MASTER $BRANCH --no-color --stat > $OUTPUT
+git diff $MASTER $BRANCH --no-color >> $OUTPUT
+git diff $MASTER $BRANCH --no-color --stat

@@ -11,9 +11,9 @@ done
 for f in $* ; do 
     if [ -f $f ]; then
         echo resetting timestamp of $f
-        echo old: $(ls -lT $f)
+        echo old: $(ls -l --time-style='+%Y%m%d%H%M%S' $f)
         touch -t 199901010101 $f
-        echo new: $(ls -lT $f)
+        echo new: $(ls -l --time-style='+%Y%m%d%H%M%S' $f)
     else
         echo $(basename $0) error, file not found: $f
         exit 1
