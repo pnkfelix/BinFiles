@@ -7,13 +7,20 @@ ME=rustc
 #RUST_DIR=rust-nopt
 #RUST_DIR=rust-dbg-nopt
 #RUST_DIR=rust-dbg
+#RUST_DIR=rust-dbg-x32
+#RUST_DIR=rust-dbg.bak
 #RUST_DIR=releases/rust-0.12.0-x86_64-apple-darwin
 #RUST_DIR=releases/rust-0.12.0-i686-apple-darwin
 RUST_DIR=multirust
 
 CARGO_DIR=cargo
 
-DIR=~/opt/$RUST_DIR
+DIR=~/opt/multirust
+#DIR=~/opt/$RUST_DIR
+#DIR=~/Dev/Mozilla/rust.git/objdir-opt/x86_64-apple-darwin/stage1
+#DIR=~/Dev/Mozilla/rust.git/objdir-dbgopt/x86_64-apple-darwin/stage1
+#DIR=~/Dev/Mozilla/rust.git/objdir-dbgopt/x86_64-apple-darwin/stage2
+
 WHERE=$DIR/bin/$ME
 
 if [ "$1" == "--where" ] ; then
@@ -23,4 +30,5 @@ fi
 
 export DYLD_LIBRARY_PATH=$DIR/lib:$LD_LIBRARY_PATH
 
+# >&2 echo "$WHERE" "$@"
 exec "$WHERE" "$@"

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ME=$(basename $0)
-REMAKE_DIR=~/opt-remake
+REMAKE_DIR=~/opt/remake/bin
 
 WHERE=$REMAKE_DIR/$ME
 

@@ -1,0 +1,14 @@
+# -*- mode: sh; indent-tabs-mode: nil -*-
+
+
+ROOT=.
+echo "ROOT: $ROOT"
+
+CONF_CMD=$ROOT/configure
+
+OPTS_USUAL=" --with-libgle=both --with-rpath --with-debug --prefix=$HOME/opt/glx-gle"
+
+ALL_OPTS="$OPTS_USUAL $*"
+
+echo "CMD: $CONF_CMD  $ALL_OPTS"
+          "$CONF_CMD" $ALL_OPTS
