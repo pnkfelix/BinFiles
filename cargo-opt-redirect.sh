@@ -3,7 +3,9 @@
 ME=$(basename $0)
 CARGO_DIR=cargo-dbg
 
-DIR=~/opt/$CARGO_DIR
+# DIR=~/opt/$CARGO_DIR
+DIR=~/opt/multirust
+
 WHERE=$DIR/bin/$ME
 
 if [ "$1" == "--where" ] ; then
