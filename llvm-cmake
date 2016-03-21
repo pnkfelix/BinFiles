@@ -1,0 +1,37 @@
+# -*- mode: sh; indent-tabs-mode: nil -*-
+
+DIR=$(basename $(pwd))
+echo "DIR: $DIR"
+
+. ~/ConfigFiles/Bash/search_for_repo.sh
+
+ROOT=.
+if ! search_parents_for_dotgit ; then
+    ROOT=$(dirname $last_git_path);
+else
+    echo "search failed";
+    exit 244;
+fi
+echo "ROOT: $ROOT"
+
+
+if [[ "$DIR" == *"dbg"* ]]; then
+    PREFIX_DBG="-dbg"
+else
+    PREFIX_DBG=""
+fi
+
+if [[ "$DIR" == *"opt"* ]]; then
+    PREFIX_OPT=""
+else
+    PREFIX_OPT="-nopt"
+fi
+
+CONF_CMD=cmake
+
+OPTS_USUAL=" -DCMAKE_INSTALL_PREFIX=$(ls -d ~/opt/llvm$PREFIX_DBG$PREFIX_OPT) $ROOT"
+
+echo "CMD: $CONF_CMD $OPTS_USUAL"
+
+# CC=clang CXX=clang++
+"$CONF_CMD" $OPT_DBG $OPT_OPT $OPTS_USUAL

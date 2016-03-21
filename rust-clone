@@ -8,6 +8,10 @@ shopt -s nullglob # nullglob enables foo* expanding to empty if no matches
 SRC=$1
 TGT=$2
 
+if [ -z $TGT ] ; then
+    echo "usage: $0 <source repo rust.git> <target dir>;"
+fi
+
 git clone $SRC $TGT
 
 for d in compiler-rt gyp libuv llvm jemalloc rt/hoedown ; do
@@ -34,15 +38,19 @@ for d in $TGT/objdir-* ; do
 done
 
 pushd $TGT
-git remote add  moz-gh git://github.com/rust-lang/rust.git
-git remote add  pnk-gh git@github.com:pnkfelix/rust.git
-git remote add huon-gh git@github.com:huonw/rust.git
-git remote add alex-gh git@github.com:alexcrichton/rust.git
-git remote add brsn-gh git@github.com:brson/rust.git
-git remote add niko-gh git@github.com:nikomatsakis/rust.git
-git remote add  pcw-gh git@github.com:pcwalton/rust.git
-git remote add  cmr-gh git@github.com:cmr/rust.git
-git remote add   eddyb-gh git@github.com:eddyb/rust.git
-git remote add zwarich-gh git@github.com:zwarich/rust.git
-git remote add  nrc-gh git@github.com:nick29581/rust.git
+git remote add        moz-gh git://github.com/rust-lang/rust.git
+git remote add        pnk-gh git@github.com:pnkfelix/rust.git
+git remote add       huon-gh git@github.com:huonw/rust.git
+git remote add       alex-gh git@github.com:alexcrichton/rust.git
+git remote add       brsn-gh git@github.com:brson/rust.git
+git remote add       niko-gh git@github.com:nikomatsakis/rust.git
+git remote add        pcw-gh git@github.com:pcwalton/rust.git
+git remote add        cmr-gh git@github.com:cmr/rust.git
+git remote add      eddyb-gh git@github.com:eddyb/rust.git
+git remote add    zwarich-gh git@github.com:zwarich/rust.git
+git remote add        nrc-gh git@github.com:nick29581/rust.git
+git remote add    dotdash-gh git@github.com:dotdash/rust.git
+git remote add eefriedman-gh git@github.com:eefriedman/rust.git
+git remote add     gankro-gh git@github.com:Gankro/rust.git
+git remote add  guillaume-gh git@github.com:GuillaumeGomez/rust.git
 popd
