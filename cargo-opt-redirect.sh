@@ -14,6 +14,7 @@ if [ "$1" == "--where" ] ; then
     exit;
 fi
 
-export DYLD_LIBRARY_PATH=$DIR/lib:$LD_LIBRARY_PATH
+export DYLD_LIBRARY_PATH=$DIR/lib:$DYLD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$DIR/lib:$LD_LIBRARY_PATH
 
 exec "$WHERE" "$@"
