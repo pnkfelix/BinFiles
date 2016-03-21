@@ -4,6 +4,14 @@
 ROOT=.
 echo "ROOT: $ROOT"
 
+CFG_OSTYPE=$(uname -s)
+case $CFG_OSTYPE in
+    Darwin)
+        PKG_CONFIG=/usr/local/bin/pkg-config;
+        ;;
+esac
+
+
 CONF_CMD=$ROOT/configure
 
 OPTS_USUAL=" --with-libgle=both --with-rpath --with-debug --prefix=$HOME/opt/glx-gle"
