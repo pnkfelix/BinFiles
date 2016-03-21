@@ -1,0 +1,10 @@
+#!/bin/sh
+
+for f in $* ; do
+    TEMPFILE=$(mktemp $(basename $f).rs.XXXX)
+    mdlp.perl $f > $TEMPFILE
+    OUTPUT=$(cat $TEMPFILE | rustc --print crate-name -)
+    cat $TEMPFILE | rustc -
+    echo "Extracted from \`$f\`, compiled to \`$OUTPUT\`; \
+temp code in \`$TEMPFILE\`"
+done
