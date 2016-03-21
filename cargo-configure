@@ -15,29 +15,11 @@ fi
 echo "ROOT: $ROOT"
 
 
-if [[ "$DIR" == *"dbg"* ]]; then
-    PREFIX_DBG="-dbg"
-    OPT_DBG="--enable-debug"
-else
-    PREFIX_DBG=""
-    OPT_DBG="--disable-debug"
-fi
+PREFIX_DBG="-dbg"
+OPT_DBG="--enable-debug"
 
-if [[ "$DIR" == *"opt"* ]]; then
-    PREFIX_OPT=""
-    #OPT_OPT="--enable-optimize"
-else
-    PREFIX_OPT="-nopt"
-    #OPT_OPT="--disable-optimize"
-fi
-
-if [[ "$DIR" == *"droid"* ]]; then
-    PREFIX_DROID="-droid"
-    OPT_TGT="--target=arm-linux-androideabi --android-cross-path=$HOME/opt/ndk_standalone"
-else
-    PREFIX_DROID=""
-    OPT_TGT=""
-fi
+PREFIX_OPT=""
+#OPT_OPT="--enable-optimize"
 
 CONF_CMD=$ROOT/configure
 
