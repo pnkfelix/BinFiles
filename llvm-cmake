@@ -1,0 +1,31 @@
+DIR=$(basename $(pwd))
+echo "DIR: $DIR"
+
+. ~/ConfigFiles/Bash/search_for_repo.sh
+
+ROOT=.
+if ! search_parents_for_dotgit ; then
+    ROOT=$(dirname $last_git_path);
+else
+    echo "search failed";
+    exit 244;
+fi
+echo "ROOT: $ROOT"
+
+TARGET_DIR=
+if [[ "$DIR" == *"dbg"* ]]; then
+   TARGET_DIR=$HOME/opt/llvm-dbg
+   CMAKE_OPTS="-DCMAKE_INSTALL_PREFIX=$TARGET_DIR -DCMAKE_BUILD_TYPE=Debug"
+else
+   TARGET_DIR=$HOME/opt/llvm
+   CMAKE_OPTS="-DCMAKE_INSTALL_PREFIX=$TARGET_DIR -DCMAKE_BUILD_TYPE=Debug"
+fi
+
+mkdir -p $TARGET_DIR
+
+CONF_CMD="cmake -G 'Unix Makefiles' $CMAKE_OPTS $ROOT"
+ALL_OPTS=""
+
+echo "CMD: $CONF_CMD $ALL_OPTS"
+
+eval $CONF_CMD $ALL_OPTS
