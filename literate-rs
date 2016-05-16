@@ -1,0 +1,26 @@
+#!/bin/sh
+
+for f in $* ; do
+    case $f in
+        *.md)
+            OUTPUT=$(echo $f | sed -e s/.md$/.rs/)
+            RS_FILE=$OUTPUT
+            echo "Converting $f to $OUTPUT"
+            cat $f | mdlp.perl --doc=slashes > $OUTPUT
+            touch -r $f $OUTPUT
+            ;;
+        *.rs)
+            RS_FILE=$f
+            OUTPUT=$(echo $f | sed -e s/.rs$/.md/)
+            echo "Converting $f to $OUTPUT"
+            cat $f | lpmd.perl --lang=rust > $OUTPUT
+            touch -r $f $OUTPUT
+            ;;
+        *)
+            echo "Input file must have .rs or .md extension; path: $f"
+            exit 1
+        ;;
+    esac
+    echo "rustc $RS_FILE"
+    rustc -A warnings --crate-type=lib $RS_FILE
+done

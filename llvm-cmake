@@ -1,3 +1,5 @@
+# -*- mode: sh; indent-tabs-mode: nil -*-
+
 DIR=$(basename $(pwd))
 echo "DIR: $DIR"
 
@@ -12,6 +14,18 @@ else
 fi
 echo "ROOT: $ROOT"
 
+if [[ "$DIR" == *"dbg"* ]]; then
+    PREFIX_DBG="-dbg"
+else
+    PREFIX_DBG=""
+fi
+
+if [[ "$DIR" == *"opt"* ]]; then
+    PREFIX_OPT=""
+else
+    PREFIX_OPT="-nopt"
+fi
+
 TARGET_DIR=
 if [[ "$DIR" == *"dbg"* ]]; then
    TARGET_DIR=$HOME/opt/llvm-dbg
@@ -23,9 +37,13 @@ fi
 
 mkdir -p $TARGET_DIR
 
-CONF_CMD="cmake -G 'Unix Makefiles' $CMAKE_OPTS $ROOT"
-ALL_OPTS=""
+OPTS_USUAL=" -DCMAKE_INSTALL_PREFIX=$(ls -d ~/opt/llvm$PREFIX_DBG$PREFIX_OPT) $ROOT"
+
+CONF_CMD="cmake"
+ALL_OPTS=" -G 'Unix Makefiles' $CMAKE_OPTS $OPTS_USUAL"
 
 echo "CMD: $CONF_CMD $ALL_OPTS"
+
+# "$CONF_CMD" $OPT_DBG $OPT_OPT $OPTS_USUAL
 
 eval $CONF_CMD $ALL_OPTS
