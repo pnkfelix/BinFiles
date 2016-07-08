@@ -1,0 +1,39 @@
+#!/bin/sh
+
+ME=valgrind
+
+DIR=~/opt/$ME
+
+WHERE=$DIR/bin/$ME
+
+if [ "$1" == "--where" ] ; then
+    echo "$WHERE";
+    exit;
+fi
+
+# exec "$WHERE" "$@"
+case $1 in
+    *stdtest*)
+
+        # special case presumed runs of `stdtest` to insert these
+        # arguments to valgrind so that:
+        #
+        # 1. For the test process::tests::test_inherit_env
+        #    add `--trace-children=yes` so that any modifications
+        #    that valgrind makes to the stdtest environment is
+        #    added to the child process as well.
+        #
+        # 2. For the test process::tests::test_process_output_output
+        #    add `--quiet` so that the output from the child process
+        #    does not get mixed up with the default valgrind output
+        #    that is added due to the `--trace-children` option added
+        #    above.
+
+        ARGS="--quiet --trace-children=yes"
+    ;;
+    *)
+        ARGS=
+    ;;
+esac
+
+exec "$WHERE" $ARGS "$@"

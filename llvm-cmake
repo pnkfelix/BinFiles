@@ -14,7 +14,6 @@ else
 fi
 echo "ROOT: $ROOT"
 
-
 if [[ "$DIR" == *"dbg"* ]]; then
     PREFIX_DBG="-dbg"
 else
@@ -27,11 +26,24 @@ else
     PREFIX_OPT="-nopt"
 fi
 
-CONF_CMD=cmake
+TARGET_DIR=
+if [[ "$DIR" == *"dbg"* ]]; then
+   TARGET_DIR=$HOME/opt/llvm-dbg
+   CMAKE_OPTS="-DCMAKE_INSTALL_PREFIX=$TARGET_DIR -DCMAKE_BUILD_TYPE=Debug"
+else
+   TARGET_DIR=$HOME/opt/llvm
+   CMAKE_OPTS="-DCMAKE_INSTALL_PREFIX=$TARGET_DIR -DCMAKE_BUILD_TYPE=Debug"
+fi
+
+mkdir -p $TARGET_DIR
 
 OPTS_USUAL=" -DCMAKE_INSTALL_PREFIX=$(ls -d ~/opt/llvm$PREFIX_DBG$PREFIX_OPT) $ROOT"
 
-echo "CMD: $CONF_CMD $OPTS_USUAL"
+CONF_CMD="cmake"
+ALL_OPTS=" -G 'Unix Makefiles' $CMAKE_OPTS $OPTS_USUAL"
 
-# CC=clang CXX=clang++
-"$CONF_CMD" $OPT_DBG $OPT_OPT $OPTS_USUAL
+echo "CMD: $CONF_CMD $ALL_OPTS"
+
+# "$CONF_CMD" $OPT_DBG $OPT_OPT $OPTS_USUAL
+
+eval $CONF_CMD $ALL_OPTS
