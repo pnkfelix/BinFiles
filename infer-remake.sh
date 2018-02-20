@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR="."
+DIR="$(pwd)"
 
 while true; do
     if [ -e "$DIR/Cargo.toml" ]; then
@@ -12,6 +12,8 @@ while true; do
         MSG='(flags of interest include `--trace`)'
         break;
     fi
+    "Did not find build config files in $DIR; going up to parent dir."
+    DIR=$(realpath "$DIR/..")
 done
 
 echo "$CMD $@"
