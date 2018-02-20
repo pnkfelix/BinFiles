@@ -1,0 +1,97 @@
+# -*- mode: sh; indent-tabs-mode: nil -*-
+
+DIR=$(basename $(pwd))
+echo "DIR: $DIR"
+
+. ~/ConfigFiles/Bash/search_for_repo.sh
+
+ROOT=.
+if ! search_parents_for_dotgit ; then
+    ROOT=$(dirname $last_git_path);
+else
+    echo "search failed";
+    exit 244;
+fi
+echo "ROOT: $ROOT"
+
+
+if [[ "$DIR" == *"dbg"* ]]; then
+    PREFIX_DBG="-dbg"
+    OPT_DBG="--enable-debug --enable-gc-debug --enable-gc-assertions"
+else
+    PREFIX_DBG=""
+    OPT_DBG="--disable-debug"
+fi
+
+if [[ "$DIR" == *"opt"* ]]; then
+    PREFIX_OPT=""
+    OPT_OPT="--enable-optimize"
+else
+    PREFIX_OPT="-nopt"
+    OPT_OPT="--disable-optimize"
+fi
+
+
+## Cribbed from the platform detection in `configure`,
+
+CFG_OSTYPE=$(uname -s)
+
+# The goal here is to come up with the same triple as LLVM would,
+# at least for the subset of platforms we're willing to target.
+
+case $CFG_OSTYPE in
+
+    Linux)
+        CFG_OSTYPE=unknown-linux-gnu
+        ;;
+
+    FreeBSD)
+        CFG_OSTYPE=unknown-freebsd
+        ;;
+
+    Darwin)
+        CFG_OSTYPE=apple-darwin
+        ;;
+
+    MINGW32*)
+        CFG_OSTYPE=pc-mingw32
+        ;;
+# Thad's Cygwin identifers below
+
+#   Vista 32 bit
+    CYGWIN_NT-6.0)
+        CFG_OSTYPE=pc-mingw32
+        ;;
+
+#   Vista 64 bit
+    CYGWIN_NT-6.0-WOW64)
+        CFG_OSTYPE=w64-mingw32
+        ;;
+
+#   Win 7 32 bit
+    CYGWIN_NT-6.1)
+        CFG_OSTYPE=pc-mingw32
+        ;;
+
+#   Win 7 64 bit
+    CYGWIN_NT-6.1-WOW64)
+        CFG_OSTYPE=w64-mingw32
+        ;;
+
+# We do not detect other OS such as XP/2003 using 64 bit using uname.
+# If we want to in the future, we will need to use Cygwin - Chuck's csih helper in /usr/lib/csih/winProductName.exe or alternative.
+    *)
+        err "unknown OS type: $CFG_OSTYPE"
+        ;;
+esac
+
+CONF_CMD=$ROOT/configure
+
+OPTS_USUAL=" --enable-handle-fork --prefix=$HOME/opt/bdwgc$PREFIX_DBG$PREFIX_OPT "
+
+ALL_OPTS="$OPT_DBG $OPT_OPT $OPTS_USUAL $*"
+
+echo "CMD: $CONF_CMD $ALL_OPTS"
+
+# CC=clang CXX=clang++
+         "$CONF_CMD" $ALL_OPTS
