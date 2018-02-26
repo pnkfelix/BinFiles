@@ -1,3 +1,14 @@
 #!/bin/sh
 
-$HOME/opt/rr/bin/rr "$@"
+# Exit script if any subcommand (namely any attempt to invoke an `rr` we find) exits with non-zero
+set -e
+
+for binpath in $HOME/opt/rr/bin/rr /usr/local/bin/rr ; do
+    if [ -e $binpath ]; then
+        $binpath "$@"
+        exit 0
+    fi
+done
+
+echo "could not find binary for \`rr\`"
+exit 1
