@@ -2,7 +2,7 @@
 
 MASTER=${1:-moz-master}
 
-OUTPUT=/tmp/$(parse_just_git_branch).patch
+OUTPUT=${2:-/tmp/$(parse_just_git_branch)}.patch
 echo output to $OUTPUT
 echo
 git log $MASTER..HEAD --no-color --reverse --stat --patch > $OUTPUT &&  git log $MASTER..HEAD --reverse --oneline
