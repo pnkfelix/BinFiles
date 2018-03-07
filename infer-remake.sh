@@ -10,11 +10,16 @@ echo last_git_path $last_git_path
 CFG_SRC_DIR="$last_git_path/../"
 X_PY="${CFG_SRC_DIR}x.py"
 
+# X_PY_FLAGS="--stage 1 --incremental --verbose"
+X_PY_FLAGS="--stage 1 --incremental "
+# X_PY_TESTS="src/test/{mir-opt,compile-fail,run-pass}"
+X_PY_TESTS="src/test/{compile-fail,run-pass,mir-opt}"
+
 while true; do
     if [ -e "$DIR/config.toml" -a -e "$X_PY" ]; then
         echo X_PY=$X_PY
         # CMD="time python $X_PY test src/tools/tidy && time python $X_PY build --stage 1 --incremental --keep-stage 0 src/libstd && time python $X_PY test --stage 1 src/test/{mir-opt,compile-fail,run-pass}"
-        CMD="pushd $DIR && time python $X_PY test --stage 1 --incremental src/tools/tidy && time python $X_PY build --stage 1 --incremental --verbose src/libstd && time python $X_PY test --stage 1  --incremental src/test/{mir-opt,compile-fail,run-pass} && popd"
+        CMD="time python $X_PY test $X_PY_FLAGS src/tools/tidy && time python $X_PY build $X_PY_FLAGS src/libstd && time python $X_PY test $X_PY_FLAGS $X_PY_TESTS"
         MSG='(flags of interest include `--stage 1` and `--help`)'
         break;
     elif [ -e "$DIR/Cargo.toml" ]; then
