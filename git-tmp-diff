@@ -2,10 +2,11 @@
 
 MASTER=${1:-moz-master}
 
-BRANCH=$(parse_just_git_branch)
+BRANCH=${2:-$(parse_just_git_branch)}
 OUTPUT=/tmp/$BRANCH.diff
 echo output to $OUTPUT
 echo
-git diff $MASTER $BRANCH --no-color --stat > $OUTPUT
-git diff $MASTER $BRANCH --no-color >> $OUTPUT
-git diff $MASTER $BRANCH --no-color --stat
+BASE=$(git merge-base $MASTER $BRANCH)
+git diff $BASE $BRANCH --no-color --stat=212 > $OUTPUT
+git diff $BASE $BRANCH --no-color >> $OUTPUT
+git diff $BASE $BRANCH --no-color --stat
