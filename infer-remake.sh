@@ -13,7 +13,7 @@ X_PY="${CFG_SRC_DIR}x.py"
 # X_PY_FLAGS="--stage 1 --incremental --verbose"
 X_PY_FLAGS="--stage 1 --incremental "
 # X_PY_TESTS="src/test/{mir-opt,compile-fail,run-pass}"
-X_PY_TESTS="src/test/{compile-fail,run-pass,mir-opt}"
+X_PY_TESTS="src/test/{compile-fail,ui,run-pass,mir-opt}"
 
 while true; do
     if [ -e "$DIR/config.toml" -a -e "$X_PY" ]; then
