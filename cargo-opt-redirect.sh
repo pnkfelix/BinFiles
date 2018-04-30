@@ -5,7 +5,8 @@ ME=$(basename $0)
 CARGO_DIR=multirust
 
 # DIR=~/opt/$CARGO_DIR
-DIR=~/opt/multirust
+# DIR=~/opt/multirust
+DIR=~/.cargo
 
 WHERE=$DIR/bin/$ME
 
