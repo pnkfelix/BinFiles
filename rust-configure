@@ -118,11 +118,11 @@ case $DIR in
 esac
 
 UNAME=$(uname)
-if [[ "$UNAME" == "Linux" ]] ; then
-    CLANG_OPT=""
-else
-    CLANG_OPT="--enable-clang"
-fi
+# if [[ "$UNAME" == "Linux" ]] ; then
+#     CLANG_OPT=""
+# else
+#     CLANG_OPT="--enable-clang"
+# fi
 
 # Some defaults suggested by alexcrichton for speeding up my
 # development times (but trying to keep the generated configure
