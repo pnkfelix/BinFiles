@@ -10,11 +10,22 @@ echo last_git_path $last_git_path
 CFG_SRC_DIR="$last_git_path/../"
 X_PY="${CFG_SRC_DIR}x.py"
 
-# X_PY_FLAGS="--stage 1 --incremental --verbose"
-X_PY_FLAGS="--stage 1 --incremental "
 # X_PY_TESTS="src/test/{mir-opt,compile-fail,run-pass}"
 X_PY_TESTS="src/test/{compile-fail,ui,run-pass,mir-opt}"
 
+arg=$1
+if [ "x$arg" = "xstage1" ] ; then
+    shift
+    echo "Shifting \`$arg\` off args list; left with [$@]"
+    X_PY_FLAGS="--stage 1 "
+elif [ "x$arg" = "xstage2" ] ; then
+    shift
+    echo "Shifting \`$arg\` off args list; left with [$@]"
+    X_PY_FLAGS="--stage 2 "
+else
+    X_PY_FLAGS="--stage 1 --incremental "
+fi
+    
 while true; do
     if [ -e "$DIR/config.toml" -a -e "$X_PY" ]; then
         echo X_PY=$X_PY
