@@ -1,0 +1,8 @@
+OUTPUT=/tmp/du-pnk
+SORTED=/tmp/du-pnk-sorted
+
+echo "Generating $OUTPUT"
+time $( cd $HOME; ls -A | xargs du -a > $OUTPUT )
+echo "Sorting $OUTPUT into $SORTED"
+time $( sort -n $OUTPUT > $SORTED )
+echo "Done generating $SORTED"
