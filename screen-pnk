@@ -1,1 +1,1 @@
-screen -r -d $(screen -list | grep .pnk | cut -f 2)
+screen -r -d $(screen -list | grep \\.pnk | cut -f 2)
