@@ -14,11 +14,17 @@ fi
 
 git clone $SRC $TGT
 
-for d in compiler-rt gyp libuv llvm jemalloc rt/hoedown ; do
-    SRC_D=$SRC/src/$d
-    if [ -e $SRC_D ] ; then
+
+SUBMODS="$( cd $SRC && git submodule status --recursive  | cut -c 43- | cut -d ' ' -f 1 | xargs )"
+
+echo "cloning all SUBMODS: $SUBMODS"
+
+# for d in compiler-rt gyp libuv llvm jemalloc rt/hoedown ; do
+for d in $SUBMODS ; do
+    SRC_D=$SRC/$d
+    if [ -e $SRC_D/.git ] ; then
         URL=$( cd $SRC_D && git config remote.origin.url )
-        git clone --reference $SRC_D -- $URL $TGT/src/$d
+        git clone --reference $SRC_D -- $URL $TGT/$d
     fi
 done
 
@@ -42,7 +48,7 @@ git remote add        moz-gh git://github.com/rust-lang/rust.git
 git remote add        pnk-gh git@github.com:pnkfelix/rust.git
 git remote add       huon-gh git@github.com:huonw/rust.git
 git remote add       alex-gh git@github.com:alexcrichton/rust.git
-git remote add       brsn-gh git@github.com:brson/rust.git
+git remote add      brson-gh git@github.com:brson/rust.git
 git remote add       niko-gh git@github.com:nikomatsakis/rust.git
 git remote add        pcw-gh git@github.com:pcwalton/rust.git
 git remote add        cmr-gh git@github.com:cmr/rust.git
@@ -53,4 +59,8 @@ git remote add    dotdash-gh git@github.com:dotdash/rust.git
 git remote add eefriedman-gh git@github.com:eefriedman/rust.git
 git remote add     gankro-gh git@github.com:Gankro/rust.git
 git remote add  guillaume-gh git@github.com:GuillaumeGomez/rust.git
+git remote add spastorino-gh git@github.com:spastorino/rust.git
+git remote add  davidtwco-gh git@github.com:davidtwco/rust.git
+git remote add    mjasper-gh git@github.com:matthewjasper/rust.git
+git remote add    mikhail-gh git@github.com:mikhail-m1/rust.git
 popd
