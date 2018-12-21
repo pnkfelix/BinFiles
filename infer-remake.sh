@@ -28,7 +28,7 @@ elif [ "x$arg" = "xstage2" ] ; then
     shift
     echo "Shifting \`$arg\` off args list; left with [$@]"
     X_PY_FLAGS="--stage 2 "
-    X_PY_TESTS="src/test/{compile-{fail,fail-fulldeps},ui,ui-fulldeps,run-{pass,fail,pass-fulldeps,fail-fulldeps},mir-opt,codegen,codegen-units,incremental,incremental-fulldeps,parse-fail}"
+    X_PY_TESTS="src/test/{compile-{fail,fail-fulldeps},ui,ui-fulldeps,run-{pass,fail,pass-fulldeps,fail-fulldeps},mir-opt,codegen,codegen-units,incremental,incremental-fulldeps}"
 else
     # X_PY_FLAGS="--stage 1 --incremental "
     # X_PY_FLAGS="--keep-stage 1 --stage 1 "
