@@ -7,15 +7,16 @@ DIR="$(pwd)"
 # CFG_SRC_DIR=$(grep -s 'CFG_SRC_DIR ' config.mk | awk '{print $3}')
 ! search_parents_for_dotgit
 echo last_git_path $last_git_path
-CFG_SRC_DIR="$last_git_path/../"
-X_PY="${CFG_SRC_DIR}x.py"
+CFG_SRC_DIR=$(dirname $last_git_path)
+X_PY="${CFG_SRC_DIR}/x.py"
 
 # X_PY_TESTS="src/test/{mir-opt,compile-fail,run-pass}"
-X_PY_TESTS="src/test/{ui,compile-fail,run-pass,mir-opt}"
+X_PY_TESTS="src/test/{incremental,ui,compile-fail,run-pass,mir-opt}"
 
 ONLY_BUILD=0
 NO_TIDY=0
 CLEAN_FIRST=0
+NO_TESTS=0
 
 for arg in "$@"
 do
@@ -42,6 +43,10 @@ do
         echo "Shifting \`$arg\` off args list; left with [$@]"
         X_PY_FLAGS="--stage 2 "
         X_PY_TESTS="src/test/{compile-{fail,fail-fulldeps},ui,ui-fulldeps,run-{pass,fail,pass-fulldeps,fail-fulldeps},mir-opt,codegen,codegen-units,incremental,incremental-fulldeps}"
+    elif [ "x$arg" = "xnotest" ] || [ "x$arg" = "xnotests" ] ; then
+        shift
+        echo "Shifting \`$arg\` off args list; left with [$@]"
+        NO_TESTS=1
     else
         # X_PY_FLAGS="--stage 1 --incremental "
         # X_PY_FLAGS="--keep-stage 1 --stage 1 "
@@ -66,6 +71,9 @@ while true; do
         BUILD="time RUSTC_FLAGS=-Ztreat-err-as-bug python $X_PY build $X_PY_FLAGS src/libstd"
         CHECK="time python $X_PY check $X_PY_FLAGS "
         TESTS="time python $X_PY test  $X_PY_FLAGS $X_PY_TESTS"
+        if [ $NO_TESTS == 1 ]; then
+            TESTS="true"
+        fi
 
         if [ "x$ONLY_BUILD" = "x1" ]; then
             CMD="$TIDY && $BUILD "
@@ -73,6 +81,7 @@ while true; do
             # CMD="$TIDY && $BUILD && $CHECK && $TESTS"
             CMD="$TIDY && $BUILD && $TESTS"
         fi
+
         MSG='(flags of interest include `--stage 1` and `--help`)'
         break;
     elif [ -e "$DIR/Cargo.toml" ]; then
