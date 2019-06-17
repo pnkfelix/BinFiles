@@ -21,6 +21,8 @@ NO_TIDY=0
 CLEAN_FIRST=0
 NO_TESTS=0
 
+STAGE="--stage 1 "
+
 for arg in "$@"
 do
     if [ "x$arg" = "xnotidy" ] ; then
@@ -40,11 +42,11 @@ do
     elif [ "x$arg" = "xstage1" ] ; then
         shift
         echo "Shifting \`$arg\` off args list; left with [$@]"
-        X_PY_FLAGS="--stage 1 "
+        STAGE="--stage 1 "
     elif [ "x$arg" = "xstage2" ] ; then
         shift
         echo "Shifting \`$arg\` off args list; left with [$@]"
-        X_PY_FLAGS="--stage 2 "
+        STAGE="--stage 2 "
         X_PY_TESTS="src/test/{compile-{fail,fail-fulldeps},ui,ui-fulldeps,run-{pass,fail,pass-fulldeps,fail-fulldeps},mir-opt,codegen,codegen-units,incremental,incremental-fulldeps}"
     elif [ "x$arg" = "xnotest" ] || [ "x$arg" = "xnotests" ] ; then
         shift
@@ -53,7 +55,7 @@ do
     else
         # X_PY_FLAGS="--stage 1 --incremental "
         # X_PY_FLAGS="--keep-stage 1 --stage 1 "
-        X_PY_FLAGS="--keep-stage 1 --stage 1 "
+        X_PY_FLAGS="--keep-stage 1 "
         # X_PY_FLAGS=" --stage 1 "
     fi
 done
@@ -71,9 +73,9 @@ while true; do
         if [ $NO_TIDY == 1 ]; then
             TIDY="true"
         fi
-        BUILD="time RUSTC_FLAGS=-Ztreat-err-as-bug python $X_PY build $X_PY_FLAGS src/libstd"
-        CHECK="time python $X_PY check $X_PY_FLAGS "
-        TESTS="time python $X_PY test  $X_PY_FLAGS $X_PY_TESTS"
+        BUILD="time RUSTC_FLAGS=-Ztreat-err-as-bug python $X_PY build $STAGE $X_PY_FLAGS src/libstd"
+        CHECK="time python $X_PY check $STAGE $X_PY_FLAGS "
+        TESTS="time python $X_PY test  $STAGE $X_PY_FLAGS $X_PY_TESTS"
         if [ $NO_TESTS == 1 ]; then
             TESTS="true"
         fi
