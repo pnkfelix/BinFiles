@@ -4,6 +4,9 @@ DIR="$(pwd)"
 
 . $HOME/ConfigFiles/Bash/search_for_repo.sh
 
+git log -1 --no-color
+echo
+
 # CFG_SRC_DIR=$(grep -s 'CFG_SRC_DIR ' config.mk | awk '{print $3}')
 ! search_parents_for_dotgit
 echo last_git_path $last_git_path
