@@ -14,12 +14,17 @@ CFG_SRC_DIR=$(dirname $last_git_path)
 X_PY="${CFG_SRC_DIR}/x.py"
 
 # X_PY_TESTS="src/test/{mir-opt,compile-fail,run-pass}"
-X_PY_TESTS="src/test/{incremental,ui,compile-fail,run-pass,mir-opt}"
+# X_PY_TESTS="src/test/{incremental,ui,compile-fail,run-pass,mir-opt}"
+X_PY_TESTS="src/test/{incremental,ui,compile-fail,codegen-units,mir-opt}"
 
 ONLY_BUILD=0
+DO_DIST=0
 NO_TIDY=0
 CLEAN_FIRST=0
 NO_TESTS=0
+VERBOSITY=""
+JOBS=""
+TARGET=""
 
 STAGE="--stage 1 "
 
@@ -29,6 +34,14 @@ do
         shift
         echo "Shifting \`$arg\` off args list; left with [$@]"
         NO_TIDY=1
+    elif [ "x$arg" = "xverbose" ]; then
+        shift
+        echo "Shifting \`$arg\` off args list; left with [$@]"
+        VERBOSE=-vv
+    elif [ "x$arg" = "xone_job" ]; then
+        shift
+        echo "Shifting \`$arg\` off args list; left with [$@]"
+        JOBS=-j1
     elif [ "x$arg" = "xclean" ]; then
         shift
         echo "Shifting \`$arg\` off args list; left with [$@]"
@@ -39,6 +52,10 @@ do
         shift
         echo "Shifting \`$arg\` off args list; left with [$@]"
         ONLY_BUILD=1
+    elif [ "x$arg" = "xdist" ]; then
+        shift
+        echo "Shifting \`$arg\` off args list; left with [$@]"
+        DO_DIST=1
     elif [ "x$arg" = "xstage1" ] ; then
         shift
         echo "Shifting \`$arg\` off args list; left with [$@]"
@@ -47,11 +64,15 @@ do
         shift
         echo "Shifting \`$arg\` off args list; left with [$@]"
         STAGE="--stage 2 "
-        X_PY_TESTS="src/test/{compile-{fail,fail-fulldeps},ui,ui-fulldeps,run-{pass,fail,pass-fulldeps,fail-fulldeps},mir-opt,codegen,codegen-units,incremental,incremental-fulldeps}"
+        X_PY_TESTS="src/test/{compile-fail,ui,ui-fulldeps,run-fail,mir-opt,codegen,codegen-units,incremental}"
     elif [ "x$arg" = "xnotest" ] || [ "x$arg" = "xnotests" ] ; then
         shift
         echo "Shifting \`$arg\` off args list; left with [$@]"
         NO_TESTS=1
+    elif [ "x$arg" = "xthumbv7em-none-eabi" ] ; then
+        shift
+        echo "Shifting \`$arg\` off args list; left with [$@]"
+        TARGET="$arg"
     else
         # X_PY_FLAGS="--stage 1 --incremental "
         # X_PY_FLAGS="--keep-stage 1 --stage 1 "
@@ -73,8 +94,14 @@ while true; do
         if [ $NO_TIDY == 1 ]; then
             TIDY="true"
         fi
-        BUILD="time RUSTC_FLAGS=-Ztreat-err-as-bug python $X_PY build $STAGE $X_PY_FLAGS src/libstd"
+        # BUILD="time RUSTC_FLAGS=-Ztreat-err-as-bug python $X_PY build $VERBOSE $JOBS $STAGE $X_PY_FLAGS --target $TARGET src/libstd"
+        if [ "x$TARGET" = "x" ]; then
+            BUILD="time python $X_PY build $VERBOSE $JOBS $STAGE $X_PY_FLAGS "
+        else
+            BUILD="time python $X_PY build $VERBOSE $JOBS $STAGE $X_PY_FLAGS --target $TARGET "
+        fi
         CHECK="time python $X_PY check $STAGE $X_PY_FLAGS "
+        DIST="time python $X_PY dist  $STAGE $X_PY_FLAGS "
         TESTS="time python $X_PY test  $STAGE $X_PY_FLAGS $X_PY_TESTS"
         if [ $NO_TESTS == 1 ]; then
             TESTS="true"
@@ -82,6 +109,9 @@ while true; do
 
         if [ "x$ONLY_BUILD" = "x1" ]; then
             CMD="$TIDY && $BUILD "
+        elif [ "x$DO_DIST" = "x1" ]; then
+            # CMD="$TIDY && $BUILD && $CHECK && $TESTS"
+            CMD="$TIDY && $BUILD && $DIST && $TESTS"
         else
             # CMD="$TIDY && $BUILD && $CHECK && $TESTS"
             CMD="$TIDY && $BUILD && $TESTS"
